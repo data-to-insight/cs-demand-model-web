@@ -7,6 +7,8 @@ import AdjustmentFormRow, { AdjustmentRow } from "./AdjustmentFormRow";
 import Block from "components/block";
 import { Cell, Row } from "./AdjustmentForm.styles";
 
+import AdjustmentValidator from "validators/Adjustments";
+
 interface AdjustmentFormProps {
   rows: AdjustmentRow[];
   onChange: (rows: AdjustmentRow[]) => void;
@@ -14,6 +16,14 @@ interface AdjustmentFormProps {
 
 const AdjustmentForm = memo((props: AdjustmentFormProps) => {
   const { rows } = props;
+
+  const validationErrors = AdjustmentValidator(rows);
+
+  const getErrorsForRow = (rowNum: number) => {
+    return validationErrors.filter((error) => {
+      return error.row === rowNum;
+    });
+  };
 
   const addEmptyRow = () => {
     const newRows = rows.slice();
@@ -47,6 +57,7 @@ const AdjustmentForm = memo((props: AdjustmentFormProps) => {
           row={row}
           onRemove={removeRow}
           idx={i}
+          errors={getErrorsForRow(i)}
         />
       );
     });

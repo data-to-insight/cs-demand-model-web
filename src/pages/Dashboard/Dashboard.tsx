@@ -116,7 +116,11 @@ const Dashboard = (props: DashboardProps) => {
             <Block>
               <PaddedBox>
                 <Expando title="Set Forecast Dates" id="forecast-dates">
-                  <ModelDatesForm dates={dates} onChange={handleDateChange} />
+                  <ModelDatesForm
+                    onSubmit={() => {}}
+                    dates={dates}
+                    onChange={handleDateChange}
+                  />
                 </Expando>
               </PaddedBox>
             </Block>
