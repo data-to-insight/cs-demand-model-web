@@ -7,10 +7,13 @@ import {
   Button,
   FormControl,
   InputLabel,
+  Alert,
 } from "@mui/material";
 import { RemoveCircle } from "@mui/icons-material";
 
 import { Cell, Row } from "./AdjustmentForm.styles";
+import { AdjustmentError } from "validators/Adjustments";
+import Block from "components/block";
 
 export type AdjustmentRow = {
   age: string;
@@ -24,6 +27,7 @@ interface AdjustmentFormRowProps {
   idx: number;
   onRemove: (idx: number) => void;
   onChange: (idx: number, rowVals: AdjustmentRow) => void;
+  errors?: AdjustmentError[];
 }
 
 const AdjustmentFormRow = (props: AdjustmentFormRowProps) => {
@@ -63,7 +67,6 @@ const AdjustmentFormRow = (props: AdjustmentFormRowProps) => {
           <Cell width="wide">{renderAgeSelect()}</Cell>
           <Cell width="wide" alignRight={true}>
             <Button
-              variant="outlined"
               onClick={() => {
                 props.onRemove(props.idx);
               }}
@@ -150,7 +153,26 @@ const AdjustmentFormRow = (props: AdjustmentFormRowProps) => {
     );
   };
 
-  return <Row>{renderRow()}</Row>;
+  const renderErrors = () => {
+    return (
+      <>
+        {props.errors?.map((error) => {
+          return (
+            <Block>
+              <Alert severity="error">{error.label}</Alert>
+            </Block>
+          );
+        })}
+      </>
+    );
+  };
+
+  return (
+    <>
+      {props.errors && props.errors.length > 0 && renderErrors()}
+      <Row>{renderRow()}</Row>
+    </>
+  );
 };
 
 export default AdjustmentFormRow;
