@@ -7599,6 +7599,10 @@ qs@6.11.0:
   dependencies:
     side-channel "^1.0.4"
 
+"quality-lac-data-ref-authorities@github:SocialFinanceDigitalLabs/quality-lac-data-ref-authorities":
+  version "2021.4.0"
+  resolved "https://codeload.github.com/SocialFinanceDigitalLabs/quality-lac-data-ref-authorities/tar.gz/c10a1d130c08455ad233f31c1d18a7012aeadc00"
+
 querystringify@^2.1.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
