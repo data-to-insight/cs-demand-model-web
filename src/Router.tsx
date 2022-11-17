@@ -3,6 +3,7 @@ import React, { Dispatch, useState } from "react";
 import { DataShape, DataAction } from "reducers/DataReducer";
 import { LoadData, Dashboard, SetModel } from "pages";
 import { Body } from "components/layout";
+import { APIControl } from "@sfdl/prpc";
 
 export enum RouteValue {
   LOAD_DATA = "LOAD_DATA",
@@ -13,6 +14,7 @@ export enum RouteValue {
 export interface RouteProps {
   data: DataShape;
   dispatch: Dispatch<DataAction>;
+  api: APIControl;
 }
 
 const Router = (props: RouteProps) => {
