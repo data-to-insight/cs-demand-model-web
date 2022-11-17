@@ -1,6 +1,8 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext, useState } from "react";
 import { Typography, Box, Grid, Button } from "@mui/material";
+import { APIControl } from "@sfdl/prpc";
 
+import { APIConfigContext } from "App";
 import Block from "components/block";
 import Uploader from "components/inputs/uploader/Upload";
 import { RouteProps, RouteValue } from "../../Router";
@@ -12,6 +14,11 @@ interface LoadDataProps extends RouteProps {
 }
 
 const LoadData = (props: LoadDataProps) => {
+  const { api } = props;
+
+  const apiConfig = useContext(APIConfigContext);
+  console.log(apiConfig);
+  const [loading, setLoading] = useState(false);
   const [fileState, fileDispatch] = useReducer(fileReducer, { ...initialData });
 
   const getTotalFilesLength = (): number => {
@@ -21,7 +28,24 @@ const LoadData = (props: LoadDataProps) => {
   };
 
   const handleNextClick = () => {
-    props.handleRouteChange(RouteValue.SET_MODEL);
+    console.log(apiConfig, fileState);
+    if (apiConfig && fileState) {
+      setLoading(true);
+
+      api.callAPI(
+        {
+          method: "UPLOAD",
+          value: fileState,
+        },
+        (response) => {
+          console.log("API Response", response);
+
+          setLoading(false);
+          props.handleRouteChange(RouteValue.SET_MODEL);
+        },
+        apiConfig
+      );
+    }
   };
 
   return (

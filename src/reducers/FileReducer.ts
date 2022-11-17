@@ -30,10 +30,55 @@ export const fileReducer = (fileState: any, fileAction: FileAction) => {
 
     case FileActionType.SET_2022:
       newState = { ...fileState };
+      console.log(fileAction.payload);
       if (Object.keys(fileAction.payload).length < 1) {
         newState = {};
       } else {
         newState.files2022 = fileAction.payload;
+      }
+
+      return newState;
+
+    case FileActionType.SET_2021:
+      newState = { ...fileState };
+      console.log(fileAction.payload);
+      if (Object.keys(fileAction.payload).length < 1) {
+        newState = {};
+      } else {
+        newState.files2021 = fileAction.payload;
+      }
+
+      return newState;
+
+    case FileActionType.SET_2020:
+      newState = { ...fileState };
+      console.log(fileAction.payload);
+      if (Object.keys(fileAction.payload).length < 1) {
+        newState = {};
+      } else {
+        newState.files2020 = fileAction.payload;
+      }
+
+      return newState;
+
+    case FileActionType.SET_2019:
+      newState = { ...fileState };
+      console.log(fileAction.payload);
+      if (Object.keys(fileAction.payload).length < 1) {
+        newState = {};
+      } else {
+        newState.files2019 = fileAction.payload;
+      }
+
+      return newState;
+
+    case FileActionType.SET_2018:
+      newState = { ...fileState };
+      console.log(fileAction.payload);
+      if (Object.keys(fileAction.payload).length < 1) {
+        newState = {};
+      } else {
+        newState.files2018 = fileAction.payload;
       }
 
       return newState;
