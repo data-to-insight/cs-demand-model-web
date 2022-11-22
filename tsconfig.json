@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "preserveSymlinks": false,
     "baseUrl": "src",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext", "WebWorker"],
