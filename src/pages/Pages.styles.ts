@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { spacing } from "theme/spacing";
+import { spacing } from "@sfdl/sf-mui-components";
 
 export const Pre = styled.pre`
   white-space: normal;

@@ -3,8 +3,7 @@ import { Typography, Box, Grid, Button } from "@mui/material";
 import { APIControl } from "@sfdl/prpc";
 
 import { APIConfigContext } from "App";
-import Block from "components/block";
-import Uploader from "components/inputs/uploader/Upload";
+import { Block, Upload as Uploader } from "@sfdl/sf-mui-components";
 import { RouteProps, RouteValue } from "../../Router";
 
 import { fileReducer, FileActionType, initialData } from "reducers/FileReducer";

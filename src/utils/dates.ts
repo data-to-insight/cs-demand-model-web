@@ -1,4 +1,4 @@
-import { DateObj } from "components/inputs/dateselect";
+import { DateObj } from "@sfdl/sf-mui-components";
 
 export const isNotEmptyDate = (dateObj: DateObj) => {
   const output =

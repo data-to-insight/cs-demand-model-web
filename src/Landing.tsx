@@ -1,12 +1,9 @@
 import React from "react";
-import { Container } from "./components/layout";
+import { Container, Body, theme as SFTheme } from "@sfdl/sf-mui-components";
 import { Start } from "pages";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { GatedProps } from "@sfdl/sf-cookie-gate";
 import { loadAnalytics } from "utils/analytics";
-import { Body } from "components/layout";
-
-import { theme as SFTheme } from "./theme/theme";
 
 const theme = createTheme(SFTheme);
 

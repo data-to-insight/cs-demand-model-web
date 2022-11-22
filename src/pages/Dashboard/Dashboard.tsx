@@ -4,8 +4,7 @@ import { Replay as ReplayIcon } from "@mui/icons-material";
 
 import { DashboardGridItem } from "./Dashboard.styles";
 import { PaddedBox } from "pages/Pages.styles";
-import Block from "components/block";
-import Expando from "components/expando";
+import { Block, Expando } from "@sfdl/sf-mui-components";
 import ModelDatesForm from "components/forms/modeldatesform";
 import AdjustmentForm from "components/forms/adjustmentform";
 import PlacementCostForm from "components/forms/placementcostform";

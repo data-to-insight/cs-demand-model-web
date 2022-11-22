@@ -2,11 +2,14 @@ import React, { memo } from "react";
 import { Typography, TextField, Alert, Button } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
 
-import Block from "components/block/Block";
+import {
+  Block,
+  DualButton,
+  DateSelect,
+  DateObj,
+} from "@sfdl/sf-mui-components";
 
-import DateSelect, { DateObj } from "components/inputs/dateselect";
 import DateValidator, { checkAllDatesSet } from "validators/Dates";
-import { DualButton } from "components/layout/Layout.styles";
 
 export type ModelDates = {
   historyStart: DateObj;

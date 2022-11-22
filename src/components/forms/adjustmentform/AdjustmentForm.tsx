@@ -1,10 +1,10 @@
 import React, { memo } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { ControlPoint as PlusIcon, NavigateNext } from "@mui/icons-material";
-import { DualButton } from "components/layout/Layout.styles";
+import { DualButton, Block } from "@sfdl/sf-mui-components";
 
 import AdjustmentFormRow, { AdjustmentRow } from "./AdjustmentFormRow";
-import Block from "components/block";
+
 import { Cell, Row } from "./AdjustmentForm.styles";
 
 import AdjustmentValidator from "validators/Adjustments";
