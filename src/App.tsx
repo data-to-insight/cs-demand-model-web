@@ -14,16 +14,14 @@ let api: null | APIControl = null;
 
 interface AppProps extends GatedProps {}
 
-type DataResponse = {
-  data: LoadStatus | unknown;
-};
-
 export const APIConfigContext = createContext<APIConfig | null>(null);
 
-const apiTransport: APITransport = APITransport.PYODIDE;
 const apiConfig: APIConfig = {
-  wheelPath: "/bin/dist/main-0.0.0-py3-none-any.whl",
-  endPoint: "endpoint",
+  transport: APITransport.WEB,
+  options: {
+    url: "http://127.0.0.1:8000/",
+    appName: "cs_demand_model.rpc:app",
+  }
 };
 
 function App(props: AppProps) {
@@ -33,7 +31,7 @@ function App(props: AppProps) {
   useEffect(() => {
     const init = async () => {
       api = new APIControl();
-      await api.loadTransport(apiTransport, handleAPIResponse);
+      await api.loadTransport(apiConfig, handleAPIResponse);
     };
 
     if (!api) {
@@ -41,10 +39,9 @@ function App(props: AppProps) {
     }
   }, []);
 
-  const handleAPIResponse = (data: DataResponse) => {
+  const handleAPIResponse = (data: string) => {
     console.log(data);
-
-    if (data.data === LoadStatus.READY) {
+    if (data === LoadStatus.READY) {
       setReady(true);
     }
   };
