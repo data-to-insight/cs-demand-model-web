@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useReducer, createContext } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import Loader from "components/loader";
+import { Loader, Container, theme as SFTheme } from "@sfdl/sf-mui-components";
 
-import { Container } from "./components/layout";
 import Router from "./Router";
 import { GatedProps } from "@sfdl/sf-cookie-gate";
 import { APIControl, APITransport, APIConfig, LoadStatus } from "@sfdl/prpc";
-
-import { theme as SFTheme } from "./theme/theme";
 
 import { dataReducer, initialData } from "reducers/DataReducer";
 

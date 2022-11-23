@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { withCookieGate } from "@sfdl/sf-cookie-gate";
-import Loader from "components/loader";
+import { Loader } from "@sfdl/sf-mui-components";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

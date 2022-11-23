@@ -13,7 +13,7 @@ import { RemoveCircle } from "@mui/icons-material";
 
 import { Cell, Row } from "./AdjustmentForm.styles";
 import { AdjustmentError } from "validators/Adjustments";
-import Block from "components/block";
+import { Block } from "@sfdl/sf-mui-components";
 
 export type AdjustmentRow = {
   age: string;

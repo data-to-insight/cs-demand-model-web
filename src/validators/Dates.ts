@@ -1,6 +1,6 @@
 import moment from "moment";
 import { ModelDates } from "components/forms/modeldatesform";
-import { DateObj } from "components/inputs/dateselect";
+import { DateObj } from "@sfdl/sf-mui-components";
 
 type DateErrors = {
   historyStart: string[];

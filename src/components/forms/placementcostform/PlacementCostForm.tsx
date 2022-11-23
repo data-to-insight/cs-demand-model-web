@@ -2,8 +2,7 @@ import React, { memo } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 
 import { NavigateNext } from "@mui/icons-material";
-import { DualButton } from "components/layout/Layout.styles";
-import Block from "components/block";
+import { DualButton, Block } from "@sfdl/sf-mui-components";
 
 export type Costs = {
   foster_IFA: string;

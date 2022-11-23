@@ -2,7 +2,7 @@ import React, { Dispatch, useState } from "react";
 
 import { DataShape, DataAction } from "reducers/DataReducer";
 import { LoadData, Dashboard, SetModel } from "pages";
-import { Body } from "components/layout";
+import { Body } from "@sfdl/sf-mui-components";
 import { APIControl } from "@sfdl/prpc";
 
 export enum RouteValue {

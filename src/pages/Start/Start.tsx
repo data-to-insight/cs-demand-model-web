@@ -10,7 +10,7 @@ import {
 
 import { laData } from "utils/authorityData";
 
-import Block from "components/block";
+import { Block } from "@sfdl/sf-mui-components";
 
 interface StartProps {
   onClick: () => void;
