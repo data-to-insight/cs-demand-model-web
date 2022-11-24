@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, {memo} from "react";
 import { Typography, TextField, Alert, Button } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
 
@@ -17,16 +17,23 @@ export type ModelDates = {
   referenceStart: DateObj;
   referenceEnd: DateObj;
   forecastEnd: DateObj;
+  stepSize: number;
+};
+
+export type ModelStats = {
+    minDate: DateObj;
+    maxDate: DateObj;
 };
 
 interface ModelDatesFormProps {
   dates: ModelDates;
+  stats?: ModelStats;
   onChange: (dates: ModelDates) => void;
   onSubmit: () => void;
 }
 
 const ModelDatesForm = memo((props: ModelDatesFormProps): JSX.Element => {
-  const { dates } = props;
+  const { stats, dates } = props;
 
   const validationErrors = DateValidator(dates);
 
@@ -38,6 +45,27 @@ const ModelDatesForm = memo((props: ModelDatesFormProps): JSX.Element => {
         })}
       </Block>
     );
+  };
+
+  const useDefaultValues = () => {
+      if (stats) {
+          const newDates = {...dates};
+          newDates.historyStart = stats.minDate;
+          newDates.referenceStart = {
+              day: stats.minDate.day,
+              month: stats.minDate.month,
+              year: `${parseInt(stats.minDate.year) - 1}`
+          };
+          newDates.referenceEnd = stats.maxDate;
+          newDates.forecastEnd = {
+              day: stats.maxDate.day,
+              month: stats.maxDate.month,
+              year: `${parseInt(stats.maxDate.year) + 2}`
+          };
+          newDates.historyEnd = newDates.forecastEnd;
+          newDates.stepSize = 10;
+          props.onChange(newDates);
+      }
   };
 
   return (
@@ -134,8 +162,13 @@ const ModelDatesForm = memo((props: ModelDatesFormProps): JSX.Element => {
         />
       </Block>
       <Block spacing="blockLarge">
-        <Typography variant="subtitle2">Step Size (in months)</Typography>
-        <TextField inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }} />
+        <Typography variant="subtitle2">Step Size (in days)</Typography>
+        <TextField inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }} onChange={(event) => {
+            const newDates = { ...dates };
+            newDates.stepSize = parseInt(event.target.value);
+            props.onChange(newDates);
+        }} value={dates.stepSize}
+        />
       </Block>
       <Block spacing="blockLarge">
         <DualButton>
@@ -150,8 +183,8 @@ const ModelDatesForm = memo((props: ModelDatesFormProps): JSX.Element => {
             Calculate now
           </Button>
 
-          <Button variant="outlined" color="secondary">
-            Use Sample Values
+          <Button variant="outlined" color="secondary" disabled={!stats} onClick={useDefaultValues}>
+            Use Default Values
           </Button>
         </DualButton>
       </Block>

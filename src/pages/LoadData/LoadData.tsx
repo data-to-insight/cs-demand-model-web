@@ -1,23 +1,22 @@
-import React, { useReducer, useContext, useState } from "react";
+import React, { useReducer } from "react";
 import { Typography, Box, Grid, Button } from "@mui/material";
 
-import { APIConfigContext } from "App";
-import { Block, Upload as Uploader } from "@sfdl/sf-mui-components";
+import { Block, Upload as Uploader, range } from "@sfdl/sf-mui-components";
 import { RouteProps, RouteValue } from "../../Router";
 
 import { fileReducer, FileActionType, initialData } from "reducers/FileReducer";
+import moment from "moment";
 
 interface LoadDataProps extends RouteProps {
   handleRouteChange: (route: RouteValue) => void;
 }
 
-const years = [2022, 2021, 2020, 2019, 2018, 2017]
+const currentYear = moment().year()
+
+const years = Array.from(range(currentYear-6, currentYear+1)) as Array<number>
 
 const LoadData = (props: LoadDataProps) => {
   const { api } = props;
-
-  const apiConfig = useContext(APIConfigContext);
-  console.log(apiConfig);
   const [fileState, fileDispatch] = useReducer(fileReducer, { ...initialData });
 
   const getTotalFilesLength = (): number => {
@@ -27,8 +26,7 @@ const LoadData = (props: LoadDataProps) => {
   };
 
   const handleNextClick = async () => {
-    console.log(apiConfig, fileState);
-    if (apiConfig && fileState) {
+    if (api && fileState) {
       const files: { year: string; file: unknown; }[] = [];
       Object.keys(fileState).forEach((year) => {
         Object.values(fileState[year]).forEach((file:any) => {
@@ -36,6 +34,7 @@ const LoadData = (props: LoadDataProps) => {
         })
       })
       try {
+        await api.callAPI({method: "reset", value: {}})
         await api.callAPI({method: "add_files", value: {files}})
         props.handleRouteChange(RouteValue.SET_MODEL);
       } catch {
