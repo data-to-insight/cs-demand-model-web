@@ -17,15 +17,24 @@ export const isNotEmptyDate = (dateObj: DateObj) => {
   return output;
 };
 
+export const isDateObj = (toBeDetermined: any): toBeDetermined is DateObj => {
+  if((toBeDetermined as DateObj).day) {
+    return true
+  }
+  return false
+}
+
 export const checkAllDatesSet = (dates: ModelDates) => {
   return (
     Object.values(dates)
-      .map((dateObj: DateObj) => {
-        return Object.values(dateObj).reduce((prev, curr) => {
-          return prev + curr;
-        }, "");
+      .map((dateObj: any) => {
+        if (isDateObj(dateObj)) {
+          return Object.values(dateObj).reduce((prev, curr) => {
+            return prev + curr;
+          }, "");
+        }
       })
-      .indexOf("") > -1
+        .indexOf("") > -1
   );
 };
 

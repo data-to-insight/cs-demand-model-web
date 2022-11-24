@@ -36,6 +36,7 @@ export const initialData: DataShape = {
     referenceStart: { day: "", month: "", year: "" },
     referenceEnd: { day: "", month: "", year: "" },
     forecastEnd: { day: "", month: "", year: "" },
+    stepSize: 10,
   },
   costs: {
     foster_IFA: "",

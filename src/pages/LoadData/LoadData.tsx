@@ -1,23 +1,22 @@
-import React, { useReducer, useContext, useState } from "react";
+import React, { useReducer } from "react";
 import { Typography, Box, Grid, Button } from "@mui/material";
-import { APIControl } from "@sfdl/prpc";
 
-import { APIConfigContext } from "App";
-import { Block, Upload as Uploader } from "@sfdl/sf-mui-components";
+import { Block, Upload as Uploader, range } from "@sfdl/sf-mui-components";
 import { RouteProps, RouteValue } from "../../Router";
 
 import { fileReducer, FileActionType, initialData } from "reducers/FileReducer";
+import moment from "moment";
 
 interface LoadDataProps extends RouteProps {
   handleRouteChange: (route: RouteValue) => void;
 }
 
+const currentYear = moment().year()
+
+const years = Array.from(range(currentYear-6, currentYear+1)) as Array<number>
+
 const LoadData = (props: LoadDataProps) => {
   const { api } = props;
-
-  const apiConfig = useContext(APIConfigContext);
-  console.log(apiConfig);
-  const [loading, setLoading] = useState(false);
   const [fileState, fileDispatch] = useReducer(fileReducer, { ...initialData });
 
   const getTotalFilesLength = (): number => {
@@ -26,26 +25,25 @@ const LoadData = (props: LoadDataProps) => {
     }, 0) as number;
   };
 
-  const handleNextClick = () => {
-    console.log(apiConfig, fileState);
-    if (apiConfig && fileState) {
-      setLoading(true);
-
-      api.callAPI(
-        {
-          method: "UPLOAD",
-          value: fileState,
-        },
-        (response) => {
-          console.log("API Response", response);
-
-          setLoading(false);
-          props.handleRouteChange(RouteValue.SET_MODEL);
-        },
-        apiConfig
-      );
+  const handleNextClick = async () => {
+    if (api && fileState) {
+      const files: { year: string; file: unknown; }[] = [];
+      Object.keys(fileState).forEach((year) => {
+        Object.values(fileState[year]).forEach((file:any) => {
+          files.push({year, file: file.file})
+        })
+      })
+      try {
+        await api.callAPI({method: "reset", value: {}})
+        await api.callAPI({method: "add_files", value: {files}})
+        props.handleRouteChange(RouteValue.SET_MODEL);
+      } catch {
+        alert("Something went wrong!")
+      }
     }
   };
+
+
 
   return (
     <>
@@ -84,70 +82,23 @@ const LoadData = (props: LoadDataProps) => {
       <Box>
         <Block spacing="blockLarge">
           <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <Uploader
-                label="Drop your 2021/22 SSDA903 files here or click to select"
-                onUploadReady={(files) => {
-                  fileDispatch({
-                    type: FileActionType.SET_2022,
-                    payload: files || {},
-                  });
-                }}
-                fileList={fileState.files2022}
-              />
-            </Grid>
 
-            <Grid item xs={4}>
+            {years.map((year) => (
+            <Grid item xs={4} key={year}>
               <Uploader
-                label="Drop your 2020/21 SSDA903 files here or click to select"
+                label={`Drop your ${year}/${year+1-2000} SSDA903 files here or click to select`}
                 onUploadReady={(files) => {
                   fileDispatch({
-                    type: FileActionType.SET_2021,
+                    type: FileActionType.ADD_FILES,
                     payload: files || {},
+                    year: year.toString(),
                   });
                 }}
-                fileList={fileState.files2021}
+                fileList={fileState[year.toString()]}
               />
             </Grid>
+            ))}
 
-            <Grid item xs={4}>
-              <Uploader
-                label="Drop your 2019/20 SSDA903 files here or click to select"
-                onUploadReady={(files) => {
-                  fileDispatch({
-                    type: FileActionType.SET_2020,
-                    payload: files || {},
-                  });
-                }}
-                fileList={fileState.files2020}
-              />
-            </Grid>
-
-            <Grid item xs={4}>
-              <Uploader
-                label="Drop your 2018/19 SSDA903 files here or click to select"
-                onUploadReady={(files) => {
-                  fileDispatch({
-                    type: FileActionType.SET_2019,
-                    payload: files || {},
-                  });
-                }}
-                fileList={fileState.files2019}
-              />
-            </Grid>
-
-            <Grid item xs={4}>
-              <Uploader
-                label="Drop your 2017/18 SSDA903 files here or click to select"
-                onUploadReady={(files) => {
-                  fileDispatch({
-                    type: FileActionType.SET_2018,
-                    payload: files || {},
-                  });
-                }}
-                fileList={fileState.files2018}
-              />
-            </Grid>
           </Grid>
         </Block>
         <Block>

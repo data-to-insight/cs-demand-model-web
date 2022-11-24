@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import { Box, Button, Grid } from "@mui/material";
 import { Replay as ReplayIcon } from "@mui/icons-material";
 
@@ -17,13 +17,17 @@ import {
   Costs,
   Proportions,
 } from "components/forms";
+import Plot from 'react-plotly.js';
+import {APIControl} from "@sfdl/prpc/dist/types";
 
 interface DashboardProps extends RouteProps {
   handleRouteChange: (route: RouteValue) => void;
+  api: APIControl;
 }
 
 const Dashboard = (props: DashboardProps) => {
-  const { dispatch } = props;
+  const { api, dispatch } = props;
+  const [plot, setPlot] = useState(undefined as any);
 
   const dates = useMemo(() => {
     return props.data.dates;
@@ -98,6 +102,14 @@ const Dashboard = (props: DashboardProps) => {
     props.handleRouteChange(RouteValue.LOAD_DATA);
   };
 
+  useEffect(() => {
+    const fetchChart = async () => {
+      const result = await api.callAPI({method: "stock", value: {}})
+      setPlot(result);
+    }
+    fetchChart();
+  }, [setPlot])
+
   return (
     <>
       <Box flexGrow={1}>
@@ -169,7 +181,7 @@ const Dashboard = (props: DashboardProps) => {
             </Block>
           </Grid>
           <Grid item xs={7} style={DashboardGridItem}>
-            asdads
+            { plot && <Plot data={plot.data} layout={plot.layout}/>}
           </Grid>
         </Grid>
       </Box>
