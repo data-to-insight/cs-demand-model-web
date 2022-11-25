@@ -112,6 +112,7 @@ const Dashboard = (props: DashboardProps) => {
   };
 
   const fetchChart = async () => {
+    setPlot(undefined);
     const result = await api.callAPI({method: "predict", value: {
         history_start: to_date(dates.historyStart),
         history_end: to_date(dates.historyEnd),
@@ -146,7 +147,7 @@ const Dashboard = (props: DashboardProps) => {
               <PaddedBox>
                 <Expando title="Set Forecast Dates" id="forecast-dates">
                   <ModelDatesForm
-                    onSubmit={fetchChart}
+                    onSubmit={() => setDataRequested(false)}
                     dates={dates}
                     onChange={handleDateChange}
                   />

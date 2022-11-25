@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import { Typography, Box, Grid, Button } from "@mui/material";
 
-import { Block, Upload as Uploader, range } from "@sfdl/sf-mui-components";
+import { Block, DualButton, Upload as Uploader, range } from "@sfdl/sf-mui-components";
 import { RouteProps, RouteValue } from "../../Router";
 
 import { fileReducer, FileActionType, initialData } from "reducers/FileReducer";
@@ -44,7 +44,16 @@ const LoadData = (props: LoadDataProps) => {
     }
   };
 
-
+  const handleSampleData = async() => {
+    try {
+      await api.callAPI({method: "reset", value: {}})
+      await api.callAPI({method: "sample_files", value: {}})
+      props.handleRouteChange(RouteValue.SET_MODEL);
+    } catch (ex) {
+      console.error("API sample_files request failed", ex);
+      alert("Something went wrong!")
+    }
+  }
 
   return (
     <>
@@ -103,13 +112,21 @@ const LoadData = (props: LoadDataProps) => {
           </Grid>
         </Block>
         <Block>
-          <Button
-            onClick={handleNextClick}
-            variant="contained"
-            disabled={getTotalFilesLength() < 1}
-          >
-            Next
-          </Button>
+          <DualButton>
+            <Button
+              onClick={handleNextClick}
+              variant="contained"
+              disabled={getTotalFilesLength() < 1}
+            >
+              Next
+            </Button>
+            <Button
+                onClick={handleSampleData}
+                variant="outlined" color="secondary"
+            >
+              Use Sample Data
+            </Button>
+          </DualButton>
         </Block>
       </Box>
     </>

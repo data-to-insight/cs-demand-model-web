@@ -33,7 +33,7 @@ function App(props: AppProps) {
       } else {
         apiConfig.transport = APITransport.PYODIDE;
         apiConfig.options.nativePackages = ['numpy', 'pandas'];
-        apiConfig.options.packages = parsed.packages ? parsed.packages : ['cs-demand-model'];
+        apiConfig.options.packages = parsed.packages ? parsed.packages : [process.env.PUBLIC_URL + '/dist/cs_demand_model-0.2.0-py3-none-any.whl', 'plotly'];
       }
       api = new APIControl();
       console.log("API Config", apiConfig);
@@ -45,9 +45,14 @@ function App(props: AppProps) {
     }
   }, []);
 
-  const handleAPIResponse = (data: string) => {
-    if (data === LoadStatus.READY) {
+  const handleAPIResponse = (data: any) => {
+    if (data?.error) {
+      console.error("Failed to initialise API", data.error);
+      alert("Failed to load pyodide");
+    } else if (data === LoadStatus.READY) {
       setReady(true);
+    } else {
+      console.log('Unknown API response', data);
     }
   };
 
