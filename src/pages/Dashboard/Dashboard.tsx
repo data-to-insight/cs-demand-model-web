@@ -26,16 +26,9 @@ interface DashboardProps extends RouteProps {
   api: APIControl;
 }
 
-const to_date = (value: DateObj) => {
-  if (!value) {
-    return undefined;
-  }
-  return `${value.year}-${value.month}-${value.day}`
-}
-
 const Dashboard = (props: DashboardProps) => {
   const { api, dispatch } = props;
-  const [plot, setPlot] = useState(undefined as any);
+  const [pageContent, setPageContent] = useState(undefined as any);
   const [dataRequested, setDataRequested] = useState(false);
 
   const dates = useMemo(() => {
@@ -112,20 +105,23 @@ const Dashboard = (props: DashboardProps) => {
   };
 
   const fetchChart = async () => {
-    setPlot(undefined);
+    setPageContent(undefined);
     const result = await api.callAPI({method: "predict", value: {
-        history_start: to_date(dates.historyStart),
-        history_end: to_date(dates.historyEnd),
-        reference_start: to_date(dates.referenceStart),
-        reference_end: to_date(dates.referenceEnd),
-        forecast_end: to_date(dates.forecastEnd),
-        step_days: dates.stepSize,
+        dates,
+        adjustmentRows,
+        costs,
+        proportions,
       }})
-    setPlot(result);
+    setPageContent(result);
   }
 
   if (!dataRequested) {
-    fetchChart();
+    try {
+      fetchChart();
+    } catch (ex) {
+      console.error("Failed to fetch charts", ex);
+      alert("Failed to fetch charts.")
+    }
     setDataRequested(true);
   }
 
@@ -154,22 +150,6 @@ const Dashboard = (props: DashboardProps) => {
                 </Expando>
               </PaddedBox>
             </Block>
-
-            <Block>
-              <PaddedBox>
-                <Expando
-                  title="Add Hypothetical Transfers"
-                  id="hypothetical-transfers"
-                  defaultExpanded={false}
-                >
-                  <AdjustmentForm
-                    rows={adjustmentRows}
-                    onChange={handleAdjustmentChange}
-                  />
-                </Expando>
-              </PaddedBox>
-            </Block>
-
             <Block>
               <PaddedBox>
                 <Expando
@@ -189,7 +169,7 @@ const Dashboard = (props: DashboardProps) => {
                 <Expando
                   title="Edit Proportions for Cost Categories"
                   id="cost-categories"
-                  defaultExpanded={true}
+                  defaultExpanded={false}
                 >
                   <ProportionCostCategoriesForm
                     onChange={handleProportionsChange}
@@ -198,15 +178,43 @@ const Dashboard = (props: DashboardProps) => {
                 </Expando>
               </PaddedBox>
             </Block>
+            <Block>
+              <PaddedBox>
+                <Expando
+                    title="Add Hypothetical Transfers"
+                    id="hypothetical-transfers"
+                    defaultExpanded={false}
+                >
+                  <AdjustmentForm
+                      rows={adjustmentRows}
+                      onChange={handleAdjustmentChange}
+                  />
+                </Expando>
+              </PaddedBox>
+            </Block>
           </Grid>
           <Grid item xs={7} style={DashboardGridItem}>
-            { plot && <Plot data={plot.data} layout={plot.layout}/>}
-            { !plot && <Loader type="cover" /> }
+            { pageContent && renderPageContent(pageContent) }
+            { !pageContent && <Loader type="cover" /> }
           </Grid>
         </Grid>
       </Box>
     </>
   );
 };
+
+const renderPageContent = (pageContent: any) => {
+  if (pageContent) {
+    return pageContent.map((section: any, ix: number) => {
+      if (section.type === "plot") {
+        return <Plot key={ix} data={section.plot.data} layout={section.plot.layout}/>
+      } else {
+        return []
+      }
+    })
+  } else {
+    return []
+  }
+}
 
 export default Dashboard;

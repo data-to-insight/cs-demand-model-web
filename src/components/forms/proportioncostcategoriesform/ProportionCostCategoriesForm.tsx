@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 
-import { NavigateNext } from "@mui/icons-material";
+import {NavigateNext, Send as SendIcon} from "@mui/icons-material";
 import { DualButton, Block } from "@sfdl/sf-mui-components";
 
 export type Proportions = {
@@ -155,12 +155,11 @@ const ProportionCostCategoriesForm = (
 
       <Block>
         <DualButton>
+          <Button variant="contained" endIcon={<SendIcon />}>
+            Calculate
+          </Button>
           <Button variant="outlined" color="secondary">
             Use Sample Values
-          </Button>
-
-          <Button variant="contained">
-            Calculate <NavigateNext />
           </Button>
         </DualButton>
       </Block>

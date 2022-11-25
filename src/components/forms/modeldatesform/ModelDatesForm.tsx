@@ -65,6 +65,7 @@ const ModelDatesForm = memo((props: ModelDatesFormProps): JSX.Element => {
           newDates.historyEnd = newDates.forecastEnd;
           newDates.stepSize = 10;
           props.onChange(newDates);
+          props.onSubmit();
       }
   };
 
