@@ -33,6 +33,7 @@ export const checkAllDatesSet = (dates: ModelDates) => {
             return prev + curr;
           }, "");
         }
+        return null;
       })
         .indexOf("") > -1
   );

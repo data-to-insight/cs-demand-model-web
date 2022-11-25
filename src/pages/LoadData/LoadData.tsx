@@ -37,7 +37,8 @@ const LoadData = (props: LoadDataProps) => {
         await api.callAPI({method: "reset", value: {}})
         await api.callAPI({method: "add_files", value: {files}})
         props.handleRouteChange(RouteValue.SET_MODEL);
-      } catch {
+      } catch (ex) {
+        console.error("API add_files request failed", ex);
         alert("Something went wrong!")
       }
     }

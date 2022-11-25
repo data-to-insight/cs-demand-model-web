@@ -19,6 +19,7 @@ import {
 } from "components/forms";
 import Plot from 'react-plotly.js';
 import {APIControl} from "@sfdl/prpc/dist/types";
+import { Loader } from "@sfdl/sf-mui-components";
 
 interface DashboardProps extends RouteProps {
   handleRouteChange: (route: RouteValue) => void;
@@ -199,6 +200,7 @@ const Dashboard = (props: DashboardProps) => {
           </Grid>
           <Grid item xs={7} style={DashboardGridItem}>
             { plot && <Plot data={plot.data} layout={plot.layout}/>}
+            { !plot && <Loader type="cover" /> }
           </Grid>
         </Grid>
       </Box>
