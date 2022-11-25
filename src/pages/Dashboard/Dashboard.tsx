@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useMemo, useState} from "react";
 import { Box, Button, Grid } from "@mui/material";
 import { Replay as ReplayIcon } from "@mui/icons-material";
 
 import { DashboardGridItem } from "./Dashboard.styles";
 import { PaddedBox } from "pages/Pages.styles";
-import { Block, Expando } from "@sfdl/sf-mui-components";
+import { Block, Expando, DateObj } from "@sfdl/sf-mui-components";
 import ModelDatesForm from "components/forms/modeldatesform";
 import AdjustmentForm from "components/forms/adjustmentform";
 import PlacementCostForm from "components/forms/placementcostform";
@@ -19,15 +19,24 @@ import {
 } from "components/forms";
 import Plot from 'react-plotly.js';
 import {APIControl} from "@sfdl/prpc/dist/types";
+import { Loader } from "@sfdl/sf-mui-components";
 
 interface DashboardProps extends RouteProps {
   handleRouteChange: (route: RouteValue) => void;
   api: APIControl;
 }
 
+const to_date = (value: DateObj) => {
+  if (!value) {
+    return undefined;
+  }
+  return `${value.year}-${value.month}-${value.day}`
+}
+
 const Dashboard = (props: DashboardProps) => {
   const { api, dispatch } = props;
   const [plot, setPlot] = useState(undefined as any);
+  const [dataRequested, setDataRequested] = useState(false);
 
   const dates = useMemo(() => {
     return props.data.dates;
@@ -102,13 +111,22 @@ const Dashboard = (props: DashboardProps) => {
     props.handleRouteChange(RouteValue.LOAD_DATA);
   };
 
-  useEffect(() => {
-    const fetchChart = async () => {
-      const result = await api.callAPI({method: "stock", value: {}})
-      setPlot(result);
-    }
+  const fetchChart = async () => {
+    const result = await api.callAPI({method: "predict", value: {
+        history_start: to_date(dates.historyStart),
+        history_end: to_date(dates.historyEnd),
+        reference_start: to_date(dates.referenceStart),
+        reference_end: to_date(dates.referenceEnd),
+        forecast_end: to_date(dates.forecastEnd),
+        step_days: dates.stepSize,
+      }})
+    setPlot(result);
+  }
+
+  if (!dataRequested) {
     fetchChart();
-  }, [setPlot])
+    setDataRequested(true);
+  }
 
   return (
     <>
@@ -128,7 +146,7 @@ const Dashboard = (props: DashboardProps) => {
               <PaddedBox>
                 <Expando title="Set Forecast Dates" id="forecast-dates">
                   <ModelDatesForm
-                    onSubmit={() => {}}
+                    onSubmit={fetchChart}
                     dates={dates}
                     onChange={handleDateChange}
                   />
@@ -182,6 +200,7 @@ const Dashboard = (props: DashboardProps) => {
           </Grid>
           <Grid item xs={7} style={DashboardGridItem}>
             { plot && <Plot data={plot.data} layout={plot.layout}/>}
+            { !plot && <Loader type="cover" /> }
           </Grid>
         </Grid>
       </Box>

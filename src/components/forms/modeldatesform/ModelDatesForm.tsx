@@ -54,13 +54,13 @@ const ModelDatesForm = memo((props: ModelDatesFormProps): JSX.Element => {
           newDates.referenceStart = {
               day: stats.minDate.day,
               month: stats.minDate.month,
-              year: `${parseInt(stats.minDate.year) - 1}`
+              year: `${parseInt(stats.maxDate.year) - 1}`
           };
           newDates.referenceEnd = stats.maxDate;
           newDates.forecastEnd = {
               day: stats.maxDate.day,
               month: stats.maxDate.month,
-              year: `${parseInt(stats.maxDate.year) + 2}`
+              year: `${parseInt(stats.maxDate.year) + 1}`
           };
           newDates.historyEnd = newDates.forecastEnd;
           newDates.stepSize = 10;
