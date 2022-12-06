@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react";
 import queryString from 'query-string';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
 import { Loader, Container, theme as SFTheme } from "@sfdl/sf-mui-components";
-
-import Router from "./Router";
 import { GatedProps } from "@sfdl/sf-cookie-gate";
 import { APIControl, APITransport, LoadStatus } from "@sfdl/prpc";
 
@@ -16,7 +13,6 @@ let api: null | APIControl = null;
 interface AppProps extends GatedProps {}
 
 function App(props: AppProps) {
-  const [ready, setReady] = useState(false);
   const [dataState, dataDispatch] = useReducer(dataReducer, { ...initialData });
 
   useEffect(() => {

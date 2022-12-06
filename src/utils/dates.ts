@@ -13,3 +13,7 @@ export const isoToDateObj = (value: string): DateObj => {
   const monthName = moment(month, 'MM').format('MMMM');
   return {year, month: monthName, day};
 }
+
+export const dateObjToIso = (value: DateObj): string => {
+  return moment(`${value.day} ${value.month} ${value.year}`, "D MMM YYYY").format("YYYY-MM-DD");
+}

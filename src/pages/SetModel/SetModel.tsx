@@ -6,6 +6,8 @@ import { RouteProps, RouteValue } from "../../Router";
 import { DataActionType } from "reducers/DataReducer";
 import {isoToDateObj} from "../../utils/dates";
 import {ModelStats} from "../../components/forms/modeldatesform/ModelDatesForm";
+import RootLayout, {PageProps} from "../../t2/layouts/root";
+import { Loader } from "@sfdl/sf-mui-components";
 
 interface SetModelProps extends RouteProps {
   handleRouteChange: (route: RouteValue) => void;
@@ -13,41 +15,43 @@ interface SetModelProps extends RouteProps {
 
 const SetModel = (props: SetModelProps) => {
   const { api, dispatch, data } = props;
-  const [stats, setStats] = useState(undefined as ModelStats | undefined);
+  const [ loading, setLoading ] = useState(false);
+  const [ page, setPage ] = useState(null as PageProps | null);
 
-  const handleChange = (dates: ModelDates) => {
-    dispatch({
-      type: DataActionType.SET_MODEL_DATES,
-      payload: { value: dates },
-    });
-  };
+  useEffect(() => {
+    const submit = async () => {
+      setLoading(true);
+      const pageResult = await api.callAPI({method: "prepare", value: {}})
+      setPage(pageResult as PageProps);
+      setLoading(false);
+    }
+    if (!page && !loading) {
+      submit();
+    }
+  }, [api, page, loading]);
 
-  useEffect( () => {
-    const init = async () => {
-      try {
-        const stats = await api.callAPI({method: "population_stats", value: {}});
-        setStats({minDate: isoToDateObj(stats.minDate), maxDate: isoToDateObj(stats.maxDate)});
-      } catch (ex) {
-        alert('Failed to load population_stats')
-      }
-    };
-    init();
-  }, [api])
+  const onSubmit = async (action: string, state: any) => {
+    if (props.api) {
+      const result = await props.api.callAPI({method: action, value: state});
+      console.log("Received result", result);
+      setPage(result);
+    }
+  }
 
-  return (
-    <>
-      <Box flexGrow={1}>
-        <ModelDatesForm
-          onSubmit={() => {
-            props.handleRouteChange(RouteValue.DASHBOARD);
-          }}
-          dates={data.dates}
-          stats={stats}
-          onChange={handleChange}
-        />
-      </Box>
-    </>
-  );
+  if (loading) {
+    return <Loader type="cover" />
+  } else if (page) {
+    return <RootLayout {...page} onSubmit={onSubmit} />
+  } else {
+    return <p>Something may have gone wrong...</p>
+  }
+
+  // return (
+  //   <>
+  //     <Box flexGrow={1}>
+  //     </Box>
+  //   </>
+  // );
 };
 
 export default SetModel;
