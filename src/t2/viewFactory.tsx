@@ -1,6 +1,10 @@
 import React from "react";
-import BoxComponent from "./components/BoxComponent";
+import BoxPage from "./components/BoxPage";
+import ButtonBarComponent from "./components/ButtonBarComponent";
+import ButtonComponent from "./components/ButtonComponent";
+import SideBarPage from "./components/SideBarPage";
 import ParagraphComponent from "./components/ParagraphComponent";
+import ChartComponent from "./components/ChartComponent";
 
 export interface ViewProps {
   id: string;
@@ -12,8 +16,12 @@ export interface ViewFactoryProps {
 }
 
 const components: Record<string, any> = {
-  box: BoxComponent,
+  boxpage: BoxPage,
+  sidebarpage: SideBarPage,
   paragraph: ParagraphComponent,
+  buttonbar: ButtonBarComponent,
+  button: ButtonComponent,
+  chart: ChartComponent,
 }
 
 const ViewFactory = (props: ViewFactoryProps) => {

@@ -4,21 +4,18 @@ import { Block } from "@sfdl/sf-mui-components";
 
 import ViewFactory, {ViewProps} from "../viewFactory";
 
-interface BoxComponentProps extends ViewProps {
+interface BoxPageProps extends ViewProps {
   components: [any];
 }
 
-const BoxComponent = (props: BoxComponentProps) => {
-  console.log("BoxComponent props=", props);
+const BoxPage = (props: BoxPageProps) => {
   return (
     <Box flexGrow={1}>
-      <Block spacing="blockLarge">
       { props.components && props.components.map((componentProps) => {
-        return <ViewFactory key={componentProps.id} viewData={componentProps} />
+        return <Block key={componentProps.id} spacing="blockLarge"><ViewFactory viewData={componentProps} /></Block>
       })}
-      </Block>
     </Box>
   )
 }
 
-export default BoxComponent;
+export default BoxPage;

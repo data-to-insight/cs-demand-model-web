@@ -60,6 +60,17 @@ class API {
     })
   }
 
+  call(action: string, data: {}) {
+    if (!this.api) {
+      throw new Error("API is not in READY state");
+    }
+    this.api.call("action", {action, data}).then((response: T2Response) => {
+      console.log("Response", response);
+      dispatch(setCurrentView(response.view))
+    })
+  }
+
+
 }
 
 export default new API();

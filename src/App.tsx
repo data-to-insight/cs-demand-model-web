@@ -20,7 +20,6 @@ const ReduxApp = () => {
 
   const ready = apiState === LoadStatus.READY;
 
-  console.log("API State", apiState, currentView)
   useEffect(() => {
     if (ready) {
       api.init()
