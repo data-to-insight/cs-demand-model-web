@@ -1,71 +1,52 @@
-import React, { useState, useEffect, useReducer } from "react";
-import queryString from 'query-string';
+import React, {useEffect} from "react";
+import {Provider as ReduxProvider, useSelector} from 'react-redux';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Loader, Container, theme as SFTheme } from "@sfdl/sf-mui-components";
-import { GatedProps } from "@sfdl/sf-cookie-gate";
-import { APIControl, APITransport, LoadStatus } from "@sfdl/prpc";
+import { Body, Loader, Container, theme as SFTheme } from "@sfdl/sf-mui-components";
+import store from './app/store';
+import {selectApiState} from "./features/api/apiSlice";
+import {selectCurrentView} from "./features/view/viewSlice";
+import ViewFactory from "./t2/viewFactory";
 
-import { dataReducer, initialData } from "reducers/DataReducer";
+import {LoadStatus} from "@sfdl/prpc";
+import {useApi} from "./hooks/api";
+
 
 const theme = createTheme(SFTheme);
-let api: null | APIControl = null;
 
-interface AppProps extends GatedProps {}
+const ReduxApp = () => {
+  const api = useApi();
+  const apiState = useSelector(selectApiState);
+  const currentView = useSelector(selectCurrentView);
 
-function App(props: AppProps) {
-  const [dataState, dataDispatch] = useReducer(dataReducer, { ...initialData });
+  const ready = apiState === LoadStatus.READY;
 
+  console.log("API State", apiState, currentView)
   useEffect(() => {
-    const init = async () => {
-      const parsed = queryString.parse(window.location.search);
-      const apiConfig: any = {
-        options: {
-          appName: "cs_demand_model.rpc:app",
-        }
-      };
-      if (parsed.url) {
-        apiConfig.transport = APITransport.WEB;
-        apiConfig.options.url = parsed.url;
-      } else {
-        apiConfig.transport = APITransport.PYODIDE;
-        apiConfig.options.nativePackages = ['numpy', 'pandas'];
-        apiConfig.options.packages = parsed.packages ? parsed.packages : [process.env.PUBLIC_URL + '/dist/cs_demand_model-0.2.0-py3-none-any.whl', 'plotly'];
-      }
-      api = new APIControl();
-      console.log("API Config", apiConfig);
-      await api.loadTransport(apiConfig, handleAPIResponse);
-    };
-
-    if (!api) {
-      init();
+    if (ready) {
+      api.init()
     }
-  }, []);
-
-  const handleAPIResponse = (data: any) => {
-    if (data?.error) {
-      console.error("Failed to initialise API", data.error);
-      alert("Failed to load pyodide");
-    } else if (data === LoadStatus.READY) {
-      setReady(true);
-    } else {
-      console.log('Unknown API response', data);
-    }
-  };
-
-  /**
-   * Rendering
-   */
+  }, [api, ready])
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        {ready && api ? (
-          <Router dispatch={dataDispatch} data={dataState} api={api} />
-        ) : (
-          <Loader type="cover" />
-        )}
-      </Container>
-    </ThemeProvider>
+    <Container>
+      <Body>
+      { currentView ? (
+        <ViewFactory viewData={currentView} />
+      ):(
+        <Loader type="cover" />
+      )}
+      </Body>
+    </Container>
+  )
+}
+
+const App = () => {
+  return (
+    <ReduxProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <ReduxApp />
+      </ThemeProvider>
+    </ReduxProvider>
   );
 }
 
