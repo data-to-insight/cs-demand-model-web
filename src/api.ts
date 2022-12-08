@@ -3,6 +3,7 @@ import { IAPI, APITransport, APICallback, LoadStatus, createApi } from "@sfdl/pr
 import store from './app/store';
 import {setApiState} from "./features/api/apiSlice";
 import {setCurrentView} from "./features/view/viewSlice";
+import {setCurrentState} from "./features/model/modelSlice";
 
 const appName = "cs_demand_model.rpc:app";
 const defaultNativePackages = ['numpy', 'pandas'];
@@ -55,7 +56,10 @@ class API {
       throw new Error("API is not in READY state");
     }
     this.api.call("action", {action: "init"}).then((response: T2Response) => {
-      console.log("Response", response);
+      console.log("INIT", response);
+
+      console.log("passing state", response.state);
+      dispatch(setCurrentState(response.state))
       dispatch(setCurrentView(response.view))
     })
   }
@@ -65,8 +69,9 @@ class API {
       throw new Error("API is not in READY state");
     }
     this.api.call("action", {action, data}).then((response: T2Response) => {
-      console.log("Response", response);
+      console.log("ACTION", response);
       dispatch(setCurrentView(response.view))
+      dispatch(setCurrentState(response.state))
     })
   }
 

@@ -5,6 +5,10 @@ import ButtonComponent from "./components/ButtonComponent";
 import SideBarPage from "./components/SideBarPage";
 import ParagraphComponent from "./components/ParagraphComponent";
 import ChartComponent from "./components/ChartComponent";
+import ExpandoComponent from "./components/ExpandoComponent";
+import FragmentComponent from "./components/FragmentComponent";
+import DateSelectComponent from "./components/DateSelectComponent";
+import TextFieldComponent from "./components/TextFieldComponent";
 
 export interface ViewProps {
   id: string;
@@ -22,6 +26,10 @@ const components: Record<string, any> = {
   buttonbar: ButtonBarComponent,
   button: ButtonComponent,
   chart: ChartComponent,
+  expando: ExpandoComponent,
+  fragment: FragmentComponent,
+  dateselect: DateSelectComponent,
+  textfield: TextFieldComponent,
 }
 
 const ViewFactory = (props: ViewFactoryProps) => {
@@ -34,5 +42,16 @@ const ViewFactory = (props: ViewFactoryProps) => {
     return <div>Missing component: {viewData.type}</div>
   }
 }
+
+export const RenderList = (props: any) => {
+  const {children} = props;
+  return (
+    <>
+    { children && children.map((componentProps: ViewProps) => {
+      return <ViewFactory key={componentProps.id} viewData={componentProps} />
+    })}
+    </>
+    )
+    }
 
 export default ViewFactory
