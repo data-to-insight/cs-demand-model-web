@@ -11,7 +11,7 @@ export const isNotEmptyDate = (dateObj: DateObj) => {
 export const isoToDateObj = (value: string): DateObj => {
   const [year, month, day] = value.split('-');
   const monthName = moment(month, 'MM').format('MMMM');
-  return {year, month: monthName, day};
+  return {year, month: monthName, day: `${parseInt(day)}`};
 }
 
 export const dateObjToIso = (value: DateObj): string => {

@@ -9,6 +9,7 @@ import ExpandoComponent from "./components/ExpandoComponent";
 import FragmentComponent from "./components/FragmentComponent";
 import DateSelectComponent from "./components/DateSelectComponent";
 import TextFieldComponent from "./components/TextFieldComponent";
+import FileUploadComponent from "./components/FileUploadComponent";
 
 export interface ViewProps {
   id: string;
@@ -30,6 +31,7 @@ const components: Record<string, any> = {
   fragment: FragmentComponent,
   dateselect: DateSelectComponent,
   textfield: TextFieldComponent,
+  fileupload: FileUploadComponent,
 }
 
 const ViewFactory = (props: ViewFactoryProps) => {

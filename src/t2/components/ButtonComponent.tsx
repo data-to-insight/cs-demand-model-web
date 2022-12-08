@@ -9,10 +9,11 @@ export interface ButtonProps extends ViewProps {
   text: string,
   variant?: "text" | "contained" | "outlined" | undefined,
   action: string,
+  disabled? : boolean,
 }
 
 const ButtonComponent = (props: ButtonProps) => {
-  const { text, variant, action } = props;
+  const { text, variant, action, disabled} = props;
   const model = useSelector(selectModel);
   const api = useApi();
 
@@ -21,7 +22,7 @@ const ButtonComponent = (props: ButtonProps) => {
   }
 
   return (
-    <Button variant={variant || "contained"} onClick={onClick}>
+    <Button variant={variant || "contained"} onClick={onClick} disabled={disabled}>
       { text }
     </Button>
   )
