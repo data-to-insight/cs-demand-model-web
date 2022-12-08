@@ -1,6 +1,7 @@
 import React from "react";
-import { Block, Expando, DateObj } from "@sfdl/sf-mui-components";
-
+import { Expando } from "@sfdl/sf-mui-components";
+import { PaddedBox } from "pages/Pages.styles";
+import { Block } from "@sfdl/sf-mui-components";
 import {RenderList, ViewProps} from "../viewFactory";
 
 export interface ExpandoComponentProps extends ViewProps {
@@ -11,9 +12,11 @@ export interface ExpandoComponentProps extends ViewProps {
 const ExpandoComponent = (props: ExpandoComponentProps) => {
 
   return (
-    <Expando title={props.title} id={props.id}>
-      <RenderList>{props.components}</RenderList>
-    </Expando>
+    <PaddedBox>
+      <Expando title={props.title} id={props.id}>
+        <RenderList wrapper={Block}>{props.components}</RenderList>
+      </Expando>
+    </PaddedBox>
   )
 
 }

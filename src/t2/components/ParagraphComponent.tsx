@@ -4,11 +4,17 @@ import {ViewProps} from "../viewFactory";
 
 export interface ParagraphComponentProps extends ViewProps {
   text: string;
+  strong: boolean;
 }
 
 const ParagraphComponent = (props: ParagraphComponentProps) => {
+  const Wrapper = props.strong ? (props: any) => (<strong>{props.children}</strong>) : React.Fragment;
   return (
-    <Typography>{props.text}</Typography>
+    <Typography>
+        <Wrapper>
+        {props.text}
+        </Wrapper>
+    </Typography>
   )
 }
 

@@ -47,10 +47,11 @@ const ViewFactory = (props: ViewFactoryProps) => {
 
 export const RenderList = (props: any) => {
   const {children} = props;
+  const Wrap = props.wrap ? props.wrap : React.Fragment;
   return (
     <>
     { children && children.map((componentProps: ViewProps) => {
-      return <ViewFactory key={componentProps.id} viewData={componentProps} />
+      return (<Wrap key={componentProps.id}><ViewFactory viewData={componentProps} /></Wrap>)
     })}
     </>
     )

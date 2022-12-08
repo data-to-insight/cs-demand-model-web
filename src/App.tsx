@@ -26,24 +26,23 @@ const ReduxApp = () => {
     }
   }, [api, ready])
 
-  return (
-    <Container>
-      <Body>
-      { currentView ? (
-        <ViewFactory viewData={currentView} />
-      ):(
-        <Loader type="cover" />
-      )}
-      </Body>
-    </Container>
-  )
+  if (currentView) {
+    return  <ViewFactory viewData={currentView} />
+  } else {
+    return <Loader type="cover" />
+  }
+
 }
 
 const App = () => {
   return (
     <ReduxProvider store={store}>
       <ThemeProvider theme={theme}>
-        <ReduxApp />
+        <Container>
+          <Body>
+            <ReduxApp />
+          </Body>
+        </Container>
       </ThemeProvider>
     </ReduxProvider>
   );
