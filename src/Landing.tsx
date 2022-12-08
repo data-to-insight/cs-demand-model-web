@@ -20,7 +20,7 @@ const Landing = (props: LandingProps) => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
-        <Body>
+        <Body title="CLA Placement Demand Modelling Tool">
           <Start
             onClick={() => {
               handleClick();

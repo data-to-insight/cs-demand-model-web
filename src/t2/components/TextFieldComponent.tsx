@@ -20,7 +20,7 @@ const TextFieldComponent = (props: TextFieldComponentProps) => {
   return (
     <>
       <Typography variant="subtitle2">{props.title}</Typography>
-      <TextField value={value} inputProps={props.input_props} onChange={onChange}/>
+      <TextField value={value || ""} inputProps={props.input_props} onChange={onChange}/>
     </>
   )
 

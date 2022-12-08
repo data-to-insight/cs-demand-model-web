@@ -10,6 +10,7 @@ import FragmentComponent from "./components/FragmentComponent";
 import DateSelectComponent from "./components/DateSelectComponent";
 import TextFieldComponent from "./components/TextFieldComponent";
 import FileUploadComponent from "./components/FileUploadComponent";
+import ErrorComponent from "./components/ErrorComponent";
 
 export interface ViewProps {
   id: string;
@@ -32,6 +33,7 @@ const components: Record<string, any> = {
   dateselect: DateSelectComponent,
   textfield: TextFieldComponent,
   fileupload: FileUploadComponent,
+  error: ErrorComponent,
 }
 
 const ViewFactory = (props: ViewFactoryProps) => {
@@ -41,7 +43,7 @@ const ViewFactory = (props: ViewFactoryProps) => {
     const C = components[viewData.type];
     return <C key={viewData.id} {...viewData} />
   } else {
-    return <div>Missing component: {viewData.type}</div>
+    return <ErrorComponent text={`Missing component: ${viewData.type}`}/>
   }
 }
 

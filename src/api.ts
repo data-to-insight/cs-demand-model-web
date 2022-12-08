@@ -7,7 +7,7 @@ import {setCurrentState} from "./features/model/modelSlice";
 
 const appName = "cs_demand_model.rpc:app";
 const defaultNativePackages = ['numpy', 'pandas'];
-const defaultPackages = [process.env.PUBLIC_URL + '/dist/cs_demand_model-0.2.0-py3-none-any.whl', 'plotly']
+const defaultPackages = ['cs-demand-model[pyodide]>=0.3.0']
 
 const dispatch = store.dispatch;
 
@@ -48,30 +48,34 @@ class API {
     initApi(apiStatusCallback).then((api) => {
       this.api = api;
       dispatch(setApiState(LoadStatus.READY));
+    }).catch((reason) => {
+      dispatch(setApiState(LoadStatus.ERROR));
     })
   }
 
   init = () => {
     if (!this.api) {
+      dispatch(setApiState(LoadStatus.ERROR));
       throw new Error("API is not in READY state");
     }
     this.api.call("action", {action: "init"}).then((response: T2Response) => {
-      console.log("INIT", response);
-
-      console.log("passing state", response.state);
       dispatch(setCurrentState(response.state))
       dispatch(setCurrentView(response.view))
+    }).catch((reason) => {
+      dispatch(setApiState(LoadStatus.ERROR));
     })
   }
 
   call(action: string, data: {}) {
     if (!this.api) {
+      dispatch(setApiState(LoadStatus.ERROR));
       throw new Error("API is not in READY state");
     }
     this.api.call("action", {action, data}).then((response: T2Response) => {
-      console.log("ACTION", response);
       dispatch(setCurrentView(response.view))
       dispatch(setCurrentState(response.state))
+    }).catch((reason) => {
+      dispatch(setCurrentView({id: "error", type: "error", text: reason.message}))
     })
   }
 
