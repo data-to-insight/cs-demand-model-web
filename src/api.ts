@@ -4,6 +4,7 @@ import store from './app/store';
 import {setApiState} from "./features/api/apiSlice";
 import {setCurrentView} from "./features/view/viewSlice";
 import {setCurrentState} from "./features/model/modelSlice";
+import {setErrors} from "./features/error/errorSlice";
 
 const appName = "cs_demand_model.rpc:app";
 const defaultNativePackages = ['numpy', 'pandas'];
@@ -12,8 +13,9 @@ const defaultPackages = ['cs-demand-model[pyodide]>=0.3.0']
 const dispatch = store.dispatch;
 
 type T2Response = {
-  view: any,
-  state: any,
+  view: unknown,
+  state: unknown,
+  errors?: unknown
 }
 
 
@@ -40,6 +42,12 @@ const apiStatusCallback = (payload: any) => {
   }
 };
 
+const apiCallCallback = (response: T2Response) => {
+  dispatch(setCurrentView(response.view))
+  dispatch(setErrors(response.errors || {}));
+  dispatch(setCurrentState(response.state))
+}
+
 
 class API {
   api?: IAPI = undefined;
@@ -58,10 +66,7 @@ class API {
       dispatch(setApiState(LoadStatus.ERROR));
       throw new Error("API is not in READY state");
     }
-    this.api.call("action", {action: "init"}).then((response: T2Response) => {
-      dispatch(setCurrentState(response.state))
-      dispatch(setCurrentView(response.view))
-    }).catch((reason) => {
+    this.api.call("action", {action: "init"}).then(apiCallCallback).catch((reason) => {
       dispatch(setApiState(LoadStatus.ERROR));
     })
   }
@@ -71,10 +76,7 @@ class API {
       dispatch(setApiState(LoadStatus.ERROR));
       throw new Error("API is not in READY state");
     }
-    this.api.call("action", {action, data}).then((response: T2Response) => {
-      dispatch(setCurrentView(response.view))
-      dispatch(setCurrentState(response.state))
-    }).catch((reason) => {
+    this.api.call("action", {action, data}).then(apiCallCallback).catch((reason) => {
       dispatch(setCurrentView({id: "error", type: "error", text: reason.message}))
     })
   }
