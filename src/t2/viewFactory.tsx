@@ -11,6 +11,7 @@ import DateSelectComponent from "./components/DateSelectComponent";
 import TextFieldComponent from "./components/TextFieldComponent";
 import FileUploadComponent from "./components/FileUploadComponent";
 import ErrorComponent from "./components/ErrorComponent";
+import SelectComponent from "./components/SelectComponent";
 
 export interface ViewProps {
   id: string;
@@ -31,6 +32,7 @@ const components: Record<string, any> = {
   expando: ExpandoComponent,
   fragment: FragmentComponent,
   dateselect: DateSelectComponent,
+  select: SelectComponent,
   textfield: TextFieldComponent,
   fileupload: FileUploadComponent,
   error: ErrorComponent,

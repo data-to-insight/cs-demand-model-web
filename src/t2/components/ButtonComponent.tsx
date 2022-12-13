@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@mui/material";
+import { Button, Icon } from "@mui/material";
 import {ViewProps} from "../viewFactory";
 import {useApi} from "../../hooks/api";
 import {useSelector} from "react-redux";
@@ -10,6 +10,8 @@ export interface ButtonProps extends ViewProps {
   variant?: "text" | "contained" | "outlined" | undefined,
   action: string,
   disabled? : boolean,
+  start_icon?: string;
+  end_icon?: string;
 }
 
 const ButtonComponent = (props: ButtonProps) => {
@@ -21,8 +23,13 @@ const ButtonComponent = (props: ButtonProps) => {
     api.call(action, model);
   }
 
+  const startIcon = props.start_icon ? <Icon>{props.start_icon}</Icon> : undefined;
+  const endIcon = props.end_icon ? <Icon>{props.end_icon}</Icon> : undefined;
+
   return (
-    <Button variant={variant || "contained"} onClick={onClick} disabled={disabled}>
+    <Button variant={variant || "contained"} onClick={onClick} disabled={disabled}
+      startIcon={startIcon} endIcon={endIcon}
+    >
       { text }
     </Button>
   )
