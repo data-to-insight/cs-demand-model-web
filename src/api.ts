@@ -8,7 +8,7 @@ import {setErrors} from "./features/error/errorSlice";
 
 const appName = "cs_demand_model.rpc:app";
 const defaultNativePackages = ['numpy', 'pandas'];
-const defaultPackages = ['cs-demand-model[pyodide]>=0.3.0']
+const defaultPackages = ['cs-demand-model[pyodide]']
 
 const dispatch = store.dispatch;
 
