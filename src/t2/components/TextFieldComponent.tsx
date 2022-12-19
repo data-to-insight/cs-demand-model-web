@@ -1,7 +1,6 @@
 import React from "react";
 import Icon from '@mui/material/Icon';
 import InputAdornment from '@mui/material/InputAdornment';
-import AssessmentIcon from '@mui/icons-material/Assessment';
 
 import {ViewProps} from "../viewFactory";
 import {Typography, TextField, Alert} from "@mui/material";
