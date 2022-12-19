@@ -5,7 +5,7 @@ import Alert from '@mui/material/Alert';
 import { Body, Loader, Container, theme as SFTheme } from "@sfdl/sf-mui-components";
 import store from './app/store';
 import {selectApiState} from "./features/api/apiSlice";
-import {selectCurrentView} from "./features/view/viewSlice";
+import {selectCurrentView, selectLoading} from "./features/view/viewSlice";
 import ViewFactory from "./t2/viewFactory";
 
 import {LoadStatus} from "@sfdl/prpc";
@@ -18,6 +18,7 @@ const ReduxApp = () => {
   const api = useApi();
   const apiState = useSelector(selectApiState);
   const currentView = useSelector(selectCurrentView);
+  const loading = useSelector(selectLoading);
 
   const ready = apiState === LoadStatus.READY;
   const error = apiState === LoadStatus.ERROR;
@@ -31,7 +32,12 @@ const ReduxApp = () => {
   if (error) {
     return <Alert severity="error">Failed to load the API. Please refresh your page to try again.</Alert>
   } else if (currentView) {
-    return  <ViewFactory viewData={currentView} />
+    return  (
+      <>
+        <ViewFactory viewData={currentView} />
+        {loading && <Loader type="cover" />}
+      </>
+    )
   } else {
     return <Loader type="cover" />
   }

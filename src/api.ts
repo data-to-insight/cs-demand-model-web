@@ -2,7 +2,7 @@ import queryString from "query-string";
 import { IAPI, APITransport, APICallback, LoadStatus, createApi } from "@sfdl/prpc";
 import store from './app/store';
 import {setApiState} from "./features/api/apiSlice";
-import {setCurrentView} from "./features/view/viewSlice";
+import {setCurrentView, setLoading} from "./features/view/viewSlice";
 import {setCurrentState} from "./features/model/modelSlice";
 import {setErrors} from "./features/error/errorSlice";
 
@@ -76,6 +76,7 @@ class API {
       dispatch(setApiState(LoadStatus.ERROR));
       throw new Error("API is not in READY state");
     }
+    dispatch(setLoading(true))
     this.api.call("action", {action, data}).then(apiCallCallback).catch((reason) => {
       dispatch(setCurrentView({id: "error", type: "error", text: reason.message}))
     })
