@@ -9,7 +9,7 @@
     "@mui/lab": "^5.0.0-alpha.102",
     "@mui/material": "^5.10.6",
     "@reduxjs/toolkit": "^1.9.1",
-    "@sfdl/prpc": "^0.3.0",
+    "@sfdl/prpc": "^0.3.3",
     "@sfdl/sf-cookie-gate": "^0.0.2",
     "@sfdl/sf-mui-components": "^0.1.0",
     "@testing-library/jest-dom": "^5.16.5",
