@@ -6,8 +6,11 @@ import { GatedProps } from "@sfdl/sf-cookie-gate";
 import { loadAnalytics } from "utils/analytics";
 
 const theme = createTheme(SFTheme);
+const GATagID = process.env.REACT_APP_GA_MEASUREMENT_ID;
 
-loadAnalytics();
+if (GATagID) {
+  loadAnalytics(GATagID);
+}
 
 type LandingProps = {} & GatedProps;
 
