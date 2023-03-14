@@ -30,7 +30,7 @@ const Start = (props: StartPageProps) => {
   const handleButtonClick = () => {
     try {
       //@ts-ignore
-      gtag("event", "cin-la-select", {
+      gtag("event", "demand-la-select", {
         localAuthority,
         localAuthorityName: laData.filter((la) => {
           return la.la_id === localAuthority;
